@@ -1,7 +1,7 @@
 <template>
   <div class="bg-gray-50 rounded-xl p-6 h-full flex flex-col">
     <div class="mb-4">
-      <h3 class="m-0 text-2xl text-gray-800">Data Ketinggian Air Laut</h3>
+      <h3 class="m-0 text-2xl text-gray-800">Data Ketinggian Air Laut - Balikpapan</h3>
       <div class="text-gray-500 text-sm mt-2">
         <span class="text-indigo-900 font-bold mr-2">December 2025</span>
         <span>Wednesday, 10</span>
@@ -11,7 +11,7 @@
       <Line :data="chartData" :options="chartOptions" />
     </div>
     <div class="text-xs text-gray-400 mt-4 text-right">
-      Source: <a href="https://telemetri.pushidrosal.id/enavigation/" target="_blank" class="text-green-500">Pushidrosal</a>
+      Source: <a href="https://telemetri.pushidrosal.id/enavigation/" target="_blank" class="text-green-500">Pushidrosal (Balikpapan Station)</a>
     </div>
   </div>
 </template>
@@ -43,10 +43,10 @@ ChartJS.register(
 )
 
 const chartData = ref({
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  labels: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
   datasets: [
     {
-      label: 'Ketinggian Air',
+      label: 'Ketinggian Air (m)',
       backgroundColor: (context) => {
         const ctx = context.chart.ctx;
         const gradient = ctx.createLinearGradient(0, 0, 0, 400);
@@ -60,8 +60,8 @@ const chartData = ref({
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: '#826AF9',
       fill: true,
-      tension: 0.4, // Smooth curve
-      data: [1.2, 1.5, 1.3, 1.8, 2.0, 2.2, 2.5, 2.3, 2.0, 1.8, 1.5, 1.3]
+      tension: 0.4,
+      data: [1.2, 1.8, 2.4, 2.1, 1.5, 0.9, 0.6, 0.9, 1.6, 2.3, 2.5, 1.9]
     }
   ]
 })
@@ -94,13 +94,4 @@ const chartOptions = ref({
   }
 })
 
-// In a real scenario, you would fetch data here
-// onMounted(async () => {
-//   try {
-//     const response = await axios.get('https://telemetri.pushidrosal.id/enavigation/api/...')
-//     // update chartData.value
-//   } catch (e) {
-//     console.error(e)
-//   }
-// })
 </script>

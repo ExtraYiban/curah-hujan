@@ -18,15 +18,15 @@
           name="OpenStreetMap"
         ></l-tile-layer>
         
-        <!-- Example of how to add InaRISK WMS layer -->
-        <!-- 
         <l-wms-tile-layer
-          url="https://inarisk.bnpb.go.id/..."
-          :layers="'flood_risk'"
+          url="https://inarisk1.bnpb.go.id:8443/geoserver/wms"
+          name="Risiko Banjir (InaRISK)"
+          layers="raster:INDEKS_BAHAYA_BANJIR1"
           :transparent="true"
           format="image/png"
+          version="1.1.0"
+          layer-type="overlay"
         ></l-wms-tile-layer>
-        -->
         
         <l-marker :lat-lng="center">
            <l-popup>Samarinda</l-popup>
