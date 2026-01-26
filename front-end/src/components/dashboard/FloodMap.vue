@@ -50,7 +50,6 @@ import { LMap, LTileLayer, LMarker, LPopup, LWmsTileLayer } from '@vue-leaflet/v
 import { ref } from 'vue'
 import L from 'leaflet'
 
-// Fix for Leaflet marker icons in Vite/Webpack
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href,
