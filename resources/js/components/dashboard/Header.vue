@@ -1,7 +1,5 @@
-<script setup>
-import { Link, usePage } from '@inertiajs/vue3'
-
-const page = usePage()
+<script setup lang="ts">
+import { Link } from '@inertiajs/vue3'
 </script>
 
 <template>

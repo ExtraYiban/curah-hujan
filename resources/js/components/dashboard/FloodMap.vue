@@ -46,13 +46,16 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import 'leaflet/dist/leaflet.css'
 import { LMap, LTileLayer, LMarker, LPopup, LWmsTileLayer } from '@vue-leaflet/vue-leaflet'
-import { ref } from 'vue'
 import L from 'leaflet'
+import { ref } from 'vue'
 
-delete L.Icon.Default.prototype._getIconUrl;
+// Fix for marker icon missing in production
+type LeafletIconDefault = any;
+delete (L.Icon.Default.prototype as LeafletIconDefault)._getIconUrl;
+
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: new URL('leaflet/dist/images/marker-icon-2x.png', import.meta.url).href,
   iconUrl: new URL('leaflet/dist/images/marker-icon.png', import.meta.url).href,
@@ -60,7 +63,7 @@ L.Icon.Default.mergeOptions({
 });
 
 const zoom = ref(13)
-const center = ref([-0.5022, 117.1536]) // Samarinda coordinates
+const center = ref<[number, number]>([-0.5022, 117.1536]) // Samarinda coordinates
 
 const zoomIn = () => {
   zoom.value++

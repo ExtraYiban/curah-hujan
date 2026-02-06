@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,10 +26,13 @@ import {
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
+  type ChartOptions,
+  type ChartData,
+  type ScriptableContext
 } from 'chart.js'
+import { ref } from 'vue'
 import { Line } from 'vue-chartjs'
-import { ref, onMounted } from 'vue'
 
 ChartJS.register(
   CategoryScale,
@@ -42,12 +45,12 @@ ChartJS.register(
   Filler
 )
 
-const chartData = ref({
+const chartData = ref<ChartData<'line'>>({
   labels: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
   datasets: [
     {
       label: 'Ketinggian Air (m)',
-      backgroundColor: (context) => {
+      backgroundColor: (context: ScriptableContext<'line'>) => {
         const ctx = context.chart.ctx;
         const gradient = ctx.createLinearGradient(0, 0, 0, 400);
         gradient.addColorStop(0, 'rgba(130, 106, 249, 0.5)');
@@ -66,7 +69,7 @@ const chartData = ref({
   ]
 })
 
-const chartOptions = ref({
+const chartOptions = ref<ChartOptions<'line'>>({
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -82,6 +85,7 @@ const chartOptions = ref({
     y: {
       beginAtZero: true,
       grid: {
+        // @ts-expect-error - borderDash is a valid option but missing in types
         borderDash: [5, 5],
         color: '#f0f0f0'
       }

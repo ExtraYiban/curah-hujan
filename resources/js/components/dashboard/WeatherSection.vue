@@ -111,16 +111,62 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
-const weatherData = ref([])
+interface WeatherDisplay {
+  date: string
+  time: string
+  temp: number
+  icon: string
+  condition: string
+  feelsLike: number
+  rainfall: number
+}
+
+interface RawForecast {
+  datetime: string
+  t: number
+  t_d: number
+  hu: number
+  vs_text: string
+  weather: number
+  weather_desc: string
+  weather_desc_en: string
+  ws: number
+  wd: string
+  wd_to: string
+  tp: number
+  local_datetime: string
+}
+
+interface RawWeatherData {
+  lokasi: {
+    adm1: string
+    adm2: string
+    adm3: string
+    adm4: string
+    provinsi: string
+    kotkab: string
+    kecamatan: string
+    desa: string
+    lon: number
+    lat: number
+    timezone: string
+  }
+  data: {
+    lokasi: RawWeatherData['lokasi']
+    cuaca: RawForecast[][]
+  }[]
+}
+
+const weatherData = ref<WeatherDisplay[]>([])
 const selectedFilter = ref('now')
 const loading = ref(false)
-const rawWeatherData = ref(null)
+const rawWeatherData = ref<RawWeatherData | null>(null)
 
 // Map BMKG weather codes to icons and conditions
-const weatherCodeMap = {
+const weatherCodeMap: Record<number, { icon: string; condition: string }> = {
   0: { icon: '☀️', condition: 'Cerah' },
   1: { icon: '☀️', condition: 'Cerah' },
   2: { icon: '⛅', condition: 'Cerah Berawan' },
@@ -139,21 +185,21 @@ const weatherCodeMap = {
   17: { icon: '⛈️', condition: 'Petir' },
 }
 
-const getWeatherIcon = (code) => {
+const getWeatherIcon = (code: number) => {
   return weatherCodeMap[code]?.icon || '☁️'
 }
 
-const getWeatherCondition = (code, desc) => {
+const getWeatherCondition = (code: number, desc: string) => {
   return weatherCodeMap[code]?.condition || desc || 'Berawan'
 }
 
-const formatDate = (dateString) => {
+const formatDate = (dateString: string) => {
   const date = new Date(dateString)
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']
   return `${date.getDate()} ${months[date.getMonth()]}`
 }
 
-const formatTime = (dateString) => {
+const formatTime = (dateString: string) => {
   const date = new Date(dateString)
   return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
 }
@@ -166,7 +212,7 @@ const fetchWeatherData = async () => {
     const result = await response.json()
 
     if (result.success && result.data) {
-      rawWeatherData.value = result.data
+      rawWeatherData.value = result.data as RawWeatherData
       updateDisplayedWeather()
 
       // Log cache info
@@ -191,12 +237,13 @@ const fetchWeatherData = async () => {
 }
 
 const updateDisplayedWeather = () => {
+  // Safe access using optional chaining
   if (!rawWeatherData.value?.data?.[0]?.cuaca) return
 
-  const allForecasts = rawWeatherData.value.data[0].cuaca.flat()
+  const allForecasts: RawForecast[] = rawWeatherData.value.data[0].cuaca.flat()
   const now = new Date()
 
-  let filtered = []
+  let filtered: RawForecast[] = []
 
   switch (selectedFilter.value) {
     case 'now':
@@ -235,7 +282,7 @@ const updateDisplayedWeather = () => {
   }))
 }
 
-const setFilter = (filter) => {
+const setFilter = (filter: string) => {
   selectedFilter.value = filter
   updateDisplayedWeather()
 }

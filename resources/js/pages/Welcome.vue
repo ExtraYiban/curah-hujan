@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
+import FloodMap from '../components/dashboard/FloodMap.vue'
 import Header from '../components/dashboard/Header.vue'
 import SeaLevelChart from '../components/dashboard/SeaLevelChart.vue'
 import WeatherSection from '../components/dashboard/WeatherSection.vue'
-import FloodMap from '../components/dashboard/FloodMap.vue'
 </script>
 
 <template>
