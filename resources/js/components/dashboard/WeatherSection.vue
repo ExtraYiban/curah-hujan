@@ -112,7 +112,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const weatherData = ref([])
 const selectedFilter = ref('now')
@@ -232,8 +232,6 @@ const updateDisplayedWeather = () => {
     condition: getWeatherCondition(forecast.weather, forecast.weather_desc),
     feelsLike: Math.round(forecast.t - 2), // Approximate feels like
     rainfall: forecast.tp,
-    humidity: forecast.hu,
-    windSpeed: forecast.ws,
   }))
 }
 
