@@ -15,7 +15,7 @@ import FloodMap from '../components/dashboard/FloodMap.vue'
   <div class="min-h-screen bg-gray-50 font-sans">
     <Header />
     <main class="max-w-350 mx-auto p-8 flex flex-col gap-8">
-      <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8">
+      <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 items-start">
         <div class="h-100">
           <SeaLevelChart />
         </div>

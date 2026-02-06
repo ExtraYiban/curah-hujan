@@ -1,16 +1,18 @@
 <template>
-  <div class="bg-indigo-100 rounded-xl p-4 flex flex-col h-125">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="m-0 text-2xl text-gray-800">Peta Samarinda</h3>
-      <div class="flex gap-4">
-        <div class="bg-white rounded-full px-4 py-2 flex items-center gap-2 w-62.5">
-          <span class="text-gray-400">🔍</span>
-          <input type="text" placeholder="Search Location.." class="border-none outline-none w-full text-sm" />
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col h-128">
+    <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
+      <h3 class="m-0 text-xl font-bold text-gray-800">Peta Samarinda</h3>
+      <div class="flex gap-3">
+        <div class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 flex items-center gap-2 w-64 focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500 transition-all">
+          <span class="text-gray-400 text-sm">🔍</span>
+          <input type="text" placeholder="Cari lokasi..." class="border-none outline-none bg-transparent w-full text-sm text-gray-700 placeholder-gray-400" />
         </div>
-        <button class="bg-blue-900 text-white border-none rounded w-10 h-10 text-xl cursor-pointer flex items-center justify-center">☰</button>
+        <button class="bg-indigo-600 text-white border-none rounded-lg w-10 h-10 cursor-pointer flex items-center justify-center hover:bg-indigo-700 transition-colors shadow-sm">
+          <span class="text-lg">☰</span>
+        </button>
       </div>
     </div>
-    <div class="grow rounded-lg overflow-hidden relative z-0">
+    <div class="grow rounded-xl overflow-hidden relative z-0 border border-gray-100">
       <l-map ref="map" v-model:zoom="zoom" :center="center" :use-global-leaflet="false">
         <l-tile-layer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

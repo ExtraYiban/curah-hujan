@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-gray-50 rounded-xl p-6 h-full flex flex-col">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 h-full flex flex-col">
     <div class="mb-4">
-      <h3 class="m-0 text-2xl text-gray-800">Data Ketinggian Air Laut - Balikpapan</h3>
+      <h3 class="m-0 text-xl font-bold text-gray-800">Data Ketinggian Air Laut - Balikpapan</h3>
       <div class="text-gray-500 text-sm mt-2">
         <span class="text-indigo-900 font-bold mr-2">December 2025</span>
         <span>Wednesday, 10</span>

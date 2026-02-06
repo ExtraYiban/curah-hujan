@@ -2,10 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\WeatherController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
+
+// Weather API routes
+Route::prefix('api')->group(function () {
+    Route::get('/weather', [WeatherController::class, 'index'])->name('api.weather');
+    Route::post('/weather/refresh', [WeatherController::class, 'refresh'])->name('api.weather.refresh');
+});
 
 Route::get('/curah-hujan', function () {
     return Inertia::render('CurahHujan');
