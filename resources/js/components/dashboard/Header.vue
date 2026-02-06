@@ -61,6 +61,15 @@ import { Link } from '@inertiajs/vue3'
             Permohonan Data
           </Link>
         </li>
+        <li>
+          <Link
+            href="/tentang-kami"
+            class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+            :class="{ 'text-blue-600 border-b-2 border-blue-600 pb-1': $page.component === 'TentangKami' }"
+          >
+            Tentang Kami
+          </Link>
+        </li>
       </ul>
     </nav>
   </header>

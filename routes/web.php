@@ -33,3 +33,7 @@ Route::get('/kualitas-air', function () {
 Route::get('/permohonan-data', function () {
     return Inertia::render('PermohonanData');
 })->name('permohonan-data');
+
+Route::get('/tentang-kami', function () {
+    return Inertia::render('TentangKami');
+})->name('tentang-kami');
