@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
 import L from 'leaflet';
+import { ref, onMounted, onUnmounted } from 'vue';
 import 'leaflet/dist/leaflet.css';
 
 const mapContainer = ref<HTMLElement | null>(null);

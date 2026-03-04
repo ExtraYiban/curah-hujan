@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class WeatherController extends Controller
 {
     private const BMKG_API_URL = 'https://api.bmkg.go.id/publik/prakiraan-cuaca';
+
     private const SAMARINDA_REGION_CODE = '64.72.03.1002';
+
     private const CACHE_KEY = 'bmkg_weather_samarinda';
+
     private const CACHE_DURATION = 10800; // 3 hours in seconds
 
     /**
@@ -25,27 +27,27 @@ class WeatherController extends Controller
                 return $this->fetchWeatherFromBMKG();
             });
 
-            if (!$weatherData) {
+            if (! $weatherData) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to fetch weather data'
+                    'message' => 'Failed to fetch weather data',
                 ], 500);
             }
 
             return response()->json([
                 'success' => true,
                 'data' => $weatherData,
-                'cached_at' => Cache::get(self::CACHE_KEY . '_timestamp', now()),
-                'cache_expires_in' => $this->getCacheExpirationTime()
+                'cached_at' => Cache::get(self::CACHE_KEY.'_timestamp', now()),
+                'cache_expires_in' => $this->getCacheExpirationTime(),
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Weather API Error: ' . $e->getMessage());
+            Log::error('Weather API Error: '.$e->getMessage());
 
             return response()->json([
                 'success' => false,
                 'message' => 'Error fetching weather data',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -54,6 +56,7 @@ class WeatherController extends Controller
      * Fetch fresh weather data from BMKG API
      *
      * @return array
+     *
      * @throws \Exception
      */
     private function fetchWeatherFromBMKG()
@@ -67,19 +70,19 @@ class WeatherController extends Controller
 
         /** @var \Illuminate\Http\Client\Response $response */
         $response = $http->get(self::BMKG_API_URL, [
-            'adm4' => self::SAMARINDA_REGION_CODE
+            'adm4' => self::SAMARINDA_REGION_CODE,
         ]);
 
         if ($response->successful()) {
             $data = $response->json();
 
             // Store timestamp when data was fetched
-            Cache::put(self::CACHE_KEY . '_timestamp', now(), self::CACHE_DURATION);
+            Cache::put(self::CACHE_KEY.'_timestamp', now(), self::CACHE_DURATION);
 
             return $data;
         }
 
-        throw new \Exception('BMKG API request failed with status: ' . $response->status());
+        throw new \Exception('BMKG API request failed with status: '.$response->status());
     }
 
     /**
@@ -89,7 +92,7 @@ class WeatherController extends Controller
     {
         try {
             Cache::forget(self::CACHE_KEY);
-            Cache::forget(self::CACHE_KEY . '_timestamp');
+            Cache::forget(self::CACHE_KEY.'_timestamp');
 
             $weatherData = $this->fetchWeatherFromBMKG();
 
@@ -99,16 +102,16 @@ class WeatherController extends Controller
                 'success' => true,
                 'message' => 'Weather data refreshed successfully',
                 'data' => $weatherData,
-                'cached_at' => now()
+                'cached_at' => now(),
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Weather Refresh Error: ' . $e->getMessage());
+            Log::error('Weather Refresh Error: '.$e->getMessage());
 
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to refresh weather data',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -118,9 +121,9 @@ class WeatherController extends Controller
      */
     private function getCacheExpirationTime()
     {
-        $cachedAt = Cache::get(self::CACHE_KEY . '_timestamp');
+        $cachedAt = Cache::get(self::CACHE_KEY.'_timestamp');
 
-        if (!$cachedAt) {
+        if (! $cachedAt) {
             return 0;
         }
 

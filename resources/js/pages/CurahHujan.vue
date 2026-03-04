@@ -151,8 +151,8 @@
 
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3'
-import Header from '../components/dashboard/Header.vue'
 import { computed } from 'vue'
+import Header from '../components/dashboard/Header.vue'
 
 // BMKG chart paths - multiple curves showing rainfall data
 const bmkgChartPath1 = computed(() => {
@@ -196,19 +196,19 @@ const bmkgChartPath3 = computed(() => {
 })
 
 // LSTM prediction chart
-const lstmChartPath = computed(() => {
-  const points = [
-    { x: 0, y: 150 },
-    { x: 100, y: 140 },
-    { x: 200, y: 120 },
-    { x: 300, y: 110 },
-    { x: 400, y: 100 },
-    { x: 500, y: 95 },
-    { x: 600, y: 105 },
-  ]
-  const pathData = points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ')
-  return `${pathData} L 600 200 L 0 200 Z`
-})
+// const lstmChartPath = computed(() => {
+//   const points = [
+//     { x: 0, y: 150 },
+//     { x: 100, y: 140 },
+//     { x: 200, y: 120 },
+//     { x: 300, y: 110 },
+//     { x: 400, y: 100 },
+//     { x: 500, y: 95 },
+//     { x: 600, y: 105 },
+//   ]
+//   const pathData = points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ')
+//   return `${pathData} L 600 200 L 0 200 Z`
+// })
 
 // Random Forest prediction chart
 const forestChartPath = computed(() => {
