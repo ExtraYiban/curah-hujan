@@ -14,5 +14,5 @@
 
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import Header from '../components/dashboard/Header.vue';
+import Header from '../Components/dashboard/Header.vue';
 </script>

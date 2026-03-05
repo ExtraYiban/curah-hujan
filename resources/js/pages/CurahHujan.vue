@@ -138,7 +138,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import { computed } from 'vue';
-import Header from '../components/dashboard/Header.vue';
+import Header from '../Components/dashboard/Header.vue';
 
 // BMKG chart paths - multiple curves showing rainfall data
 const bmkgChartPath1 = computed(() => {

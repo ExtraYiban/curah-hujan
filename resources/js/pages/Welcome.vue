@@ -2,8 +2,8 @@
 import { Head, Link } from '@inertiajs/vue3';
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
-import Header from '@/components/dashboard/Header.vue';
-import WeatherMap from '@/components/WeatherMap.vue';
+import Header from '@/Components/dashboard/Header.vue';
+import WeatherMap from '@/Components/WeatherMap.vue';
 
 interface WeatherForecast {
     datetime: string;
