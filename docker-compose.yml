@@ -1,0 +1,74 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/var/www/html
+      - vendor:/var/www/html/vendor
+    ports:
+      - "8000:8000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8000
+      DB_CONNECTION: sqlite
+    command: >
+      sh -c "
+        composer install --no-interaction &&
+        if [ ! -f .env ]; then
+          cp .env.example .env &&
+          php artisan key:generate --force --ansi;
+        fi &&
+        touch database/database.sqlite &&
+        php artisan migrate --force --ansi &&
+        php artisan serve --host=0.0.0.0 --port=8000
+      "
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@fsockopen('127.0.0.1', 8000) ? 0 : 1);"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/var/www/html
+      - vendor:/var/www/html/vendor
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      APP_ENV: local
+      DB_CONNECTION: sqlite
+    command: php artisan queue:listen --tries=1
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: on-failure
+
+  vite:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - vendor:/var/www/html/vendor
+      - node_modules:/var/www/html/node_modules
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      app:
+        condition: service_healthy
+
+volumes:
+  vendor:
+  node_modules:
