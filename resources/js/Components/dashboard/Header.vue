@@ -10,7 +10,7 @@ const user = computed(() => page.props.auth?.user);
     <header class="sticky top-0 z-50 border-b border-gray-200 bg-white">
         <nav class="mx-auto flex max-w-7xl items-center justify-between px-8 py-6">
             <div class="flex items-center gap-12">
-                <Link href="/" class="flex items-center gap-3">
+                <Link href="/" prefetch class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500">
                         <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path
@@ -28,6 +28,7 @@ const user = computed(() => page.props.auth?.user);
                     <li>
                         <Link
                             href="/"
+                            prefetch
                             class="font-medium text-gray-700 transition-colors hover:text-blue-600"
                             :class="{ 'border-b-2 border-blue-600 pb-1 text-blue-600': $page.component === 'Welcome' }"
                         >
@@ -37,6 +38,7 @@ const user = computed(() => page.props.auth?.user);
                     <li>
                         <Link
                             href="/curah-hujan"
+                            prefetch
                             class="font-medium text-gray-700 transition-colors hover:text-blue-600"
                             :class="{ 'border-b-2 border-blue-600 pb-1 text-blue-600': $page.component === 'CurahHujan' }"
                         >
@@ -46,6 +48,7 @@ const user = computed(() => page.props.auth?.user);
                     <li>
                         <Link
                             href="/tma-debit"
+                            prefetch
                             class="font-medium text-gray-700 transition-colors hover:text-blue-600"
                             :class="{ 'border-b-2 border-blue-600 pb-1 text-blue-600': $page.component === 'TmaDebit' }"
                         >
@@ -54,34 +57,8 @@ const user = computed(() => page.props.auth?.user);
                     </li>
                     <li>
                         <Link
-                            href="/iklim"
-                            class="font-medium text-gray-700 transition-colors hover:text-blue-600"
-                            :class="{ 'border-b-2 border-blue-600 pb-1 text-blue-600': $page.component === 'Iklim' }"
-                        >
-                            Iklim
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href="/kualitas-air"
-                            class="font-medium text-gray-700 transition-colors hover:text-blue-600"
-                            :class="{ 'border-b-2 border-blue-600 pb-1 text-blue-600': $page.component === 'KualitasAir' }"
-                        >
-                            Kualitas Air
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href="/permohonan-data"
-                            class="font-medium text-gray-700 transition-colors hover:text-blue-600"
-                            :class="{ 'border-b-2 border-blue-600 pb-1 text-blue-600': $page.component === 'PermohonanData' }"
-                        >
-                            Permohonan Data
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
                             href="/tentang-kami"
+                            prefetch
                             class="font-medium text-gray-700 transition-colors hover:text-blue-600"
                             :class="{ 'border-b-2 border-blue-600 pb-1 text-blue-600': $page.component === 'TentangKami' }"
                         >
@@ -94,7 +71,7 @@ const user = computed(() => page.props.auth?.user);
             <!-- Auth Buttons -->
             <div class="flex items-center gap-4">
                 <template v-if="user">
-                    <Link href="/dashboard" class="flex items-center gap-2 font-medium text-gray-700 transition-colors hover:text-blue-600">
+                    <Link href="/dashboard" prefetch class="flex items-center gap-2 font-medium text-gray-700 transition-colors hover:text-blue-600">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path
                                 stroke-linecap="round"
@@ -115,9 +92,10 @@ const user = computed(() => page.props.auth?.user);
                     </Link>
                 </template>
                 <template v-else>
-                    <Link href="/login" class="px-4 py-2 font-medium text-gray-700 transition-colors hover:text-blue-600"> Masuk </Link>
+                    <Link href="/login" prefetch class="px-4 py-2 font-medium text-gray-700 transition-colors hover:text-blue-600"> Masuk </Link>
                     <Link
                         href="/register"
+                        prefetch
                         class="transform rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 px-5 py-2 font-semibold text-white shadow-md transition-all duration-200 hover:scale-105 hover:from-blue-700 hover:to-cyan-700"
                     >
                         Daftar

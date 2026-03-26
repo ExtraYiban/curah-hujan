@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -14,13 +15,15 @@ class WeatherController extends Controller
 
     private const CACHE_KEY = 'bmkg_weather_samarinda';
 
+    private const FALLBACK_CACHE_KEY = 'bmkg_weather_samarinda_fallback';
+
     private const CACHE_DURATION = 10800; // 3 hours in seconds
 
     /**
      * Get weather data for Samarinda
      * Data is cached for 3 hours to reduce API calls
      */
-    public function index()
+    public function index(): JsonResponse
     {
         try {
             $weatherData = Cache::remember(self::CACHE_KEY, self::CACHE_DURATION, function () {
@@ -44,6 +47,18 @@ class WeatherController extends Controller
         } catch (\Exception $e) {
             Log::error('Weather API Error: '.$e->getMessage());
 
+            $staleWeatherData = Cache::get(self::FALLBACK_CACHE_KEY);
+
+            if ($staleWeatherData) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $staleWeatherData,
+                    'cached_at' => Cache::get(self::CACHE_KEY.'_timestamp', now()),
+                    'cache_expires_in' => 0,
+                    'stale' => true,
+                ]);
+            }
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error fetching weather data',
@@ -55,13 +70,12 @@ class WeatherController extends Controller
     /**
      * Fetch fresh weather data from BMKG API
      *
-     * @return array
      *
      * @throws \Exception
      */
-    private function fetchWeatherFromBMKG()
+    private function fetchWeatherFromBMKG(): array
     {
-        $http = Http::timeout(10);
+        $http = Http::connectTimeout(3)->timeout(5)->retry(2, 250);
 
         // Disable SSL verification in local development
         if (config('app.env') === 'local') {
@@ -74,10 +88,11 @@ class WeatherController extends Controller
         ]);
 
         if ($response->successful()) {
-            $data = $response->json();
+            $data = $this->normalizeWeatherData($response->json());
 
             // Store timestamp when data was fetched
             Cache::put(self::CACHE_KEY.'_timestamp', now(), self::CACHE_DURATION);
+            Cache::put(self::FALLBACK_CACHE_KEY, $data, self::CACHE_DURATION * 2);
 
             return $data;
         }
@@ -88,7 +103,7 @@ class WeatherController extends Controller
     /**
      * Manually refresh weather data (bypass cache)
      */
-    public function refresh()
+    public function refresh(): JsonResponse
     {
         try {
             Cache::forget(self::CACHE_KEY);
@@ -117,9 +132,55 @@ class WeatherController extends Controller
     }
 
     /**
+     * Keep only fields used by the frontend to reduce response size and parsing time.
+     *
+     * @param  array<string, mixed>  $payload
+     * @return array<string, mixed>
+     */
+    private function normalizeWeatherData(array $payload): array
+    {
+        $locations = collect($payload['data'] ?? [])->map(function (array $location): array {
+            $normalizedLocation = [
+                'lokasi' => [
+                    'adm1' => $location['lokasi']['adm1'] ?? null,
+                    'adm2' => $location['lokasi']['adm2'] ?? null,
+                    'adm3' => $location['lokasi']['adm3'] ?? null,
+                    'adm4' => $location['lokasi']['adm4'] ?? null,
+                    'provinsi' => $location['lokasi']['provinsi'] ?? null,
+                    'kotkab' => $location['lokasi']['kotkab'] ?? null,
+                    'kecamatan' => $location['lokasi']['kecamatan'] ?? null,
+                    'desa' => $location['lokasi']['desa'] ?? null,
+                    'lat' => $location['lokasi']['lat'] ?? null,
+                    'lon' => $location['lokasi']['lon'] ?? null,
+                ],
+                'cuaca' => [],
+            ];
+
+            $normalizedLocation['cuaca'] = collect($location['cuaca'] ?? [])->map(function (array $dayForecasts): array {
+                return collect($dayForecasts)->map(function (array $forecast): array {
+                    return [
+                        'datetime' => $forecast['datetime'] ?? null,
+                        'local_datetime' => $forecast['local_datetime'] ?? null,
+                        't' => $forecast['t'] ?? null,
+                        'weather' => $forecast['weather'] ?? null,
+                        'weather_desc' => $forecast['weather_desc'] ?? null,
+                        'hu' => $forecast['hu'] ?? null,
+                    ];
+                })->values()->all();
+            })->values()->all();
+
+            return $normalizedLocation;
+        })->values()->all();
+
+        return [
+            'data' => $locations,
+        ];
+    }
+
+    /**
      * Get cache expiration time in minutes
      */
-    private function getCacheExpirationTime()
+    private function getCacheExpirationTime(): int
     {
         $cachedAt = Cache::get(self::CACHE_KEY.'_timestamp');
 

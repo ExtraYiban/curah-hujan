@@ -45,10 +45,6 @@ Route::get('/tentang-kami', function () {
     return Inertia::render('TentangKami');
 })->name('tentang-kami');
 
-Route::get('/admin-panel', function () {
-    return Inertia::render('AdminPanel');
-})->name('admin-panel');
-
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

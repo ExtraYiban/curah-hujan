@@ -5,17 +5,17 @@
         <Header />
         <main class="mx-auto max-w-7xl p-8">
             <!-- Hero Section -->
-            <div class="bg-linear-to-r mb-8 rounded-lg from-blue-600 to-blue-800 p-12 text-white shadow-lg">
-                <h1 class="mb-4 text-4xl font-bold">Tentang Kami</h1>
-                <p class="text-xl opacity-90">Sistem Pemantau Risiko Banjir Samarinda</p>
+            <div class="mb-12 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 p-12 text-white shadow-xl">
+                <h1 class="mb-4 text-5xl font-bold">Tentang Kami</h1>
+                <p class="text-xl text-blue-100">Sistem Pemantau Risiko Banjir Samarinda</p>
             </div>
 
             <!-- About Section -->
-            <div class="mb-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
-                <div class="rounded-lg bg-white p-8 shadow">
-                    <div class="mb-4 flex items-center">
-                        <div class="mr-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
-                            <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-2">
+                <div class="rounded-2xl bg-white p-8 shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="mb-6 flex items-center gap-4">
+                        <div class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100">
+                            <svg class="h-7 w-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -32,10 +32,10 @@
                     </p>
                 </div>
 
-                <div class="rounded-lg bg-white p-8 shadow">
-                    <div class="mb-4 flex items-center">
-                        <div class="mr-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
-                            <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="rounded-2xl bg-white p-8 shadow-lg hover:shadow-xl transition-shadow">
+                    <div class="mb-6 flex items-center gap-4">
+                        <div class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-lg bg-green-100">
+                            <svg class="h-7 w-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -46,21 +46,21 @@
                         </div>
                         <h2 class="text-2xl font-bold text-gray-900">Misi Kami</h2>
                     </div>
-                    <ul class="space-y-2 leading-relaxed text-gray-700">
-                        <li class="flex items-start">
-                            <span class="mr-2 text-green-600">•</span>
+                    <ul class="space-y-3 leading-relaxed text-gray-700">
+                        <li class="flex items-start gap-3">
+                            <span class="flex-shrink-0 text-green-600 font-bold">✓</span>
                             <span>Menyediakan data curah hujan dan iklim yang akurat dan real-time</span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="mr-2 text-green-600">•</span>
+                        <li class="flex items-start gap-3">
+                            <span class="flex-shrink-0 text-green-600 font-bold">✓</span>
                             <span>Memantau tinggi muka air dan debit sungai secara berkelanjutan</span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="mr-2 text-green-600">•</span>
+                        <li class="flex items-start gap-3">
+                            <span class="flex-shrink-0 text-green-600 font-bold">✓</span>
                             <span>Memberikan informasi kualitas air yang mudah diakses</span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="mr-2 text-green-600">•</span>
+                        <li class="flex items-start gap-3">
+                            <span class="flex-shrink-0 text-green-600 font-bold">✓</span>
                             <span>Mendukung mitigasi bencana banjir di wilayah Samarinda</span>
                         </li>
                     </ul>
@@ -68,11 +68,11 @@
             </div>
 
             <!-- Features Section -->
-            <div class="mb-8 rounded-lg bg-white p-8 shadow">
-                <h2 class="mb-6 text-2xl font-bold text-gray-900">Fitur Sistem</h2>
+            <div class="mb-12 rounded-2xl bg-white p-8 shadow-lg">
+                <h2 class="mb-8 text-3xl font-bold text-gray-900">Fitur Sistem</h2>
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    <div class="rounded-lg bg-blue-50 p-6">
-                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
+                    <div class="rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 p-6 hover:shadow-md transition-shadow">
+                        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600">
                             <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     stroke-linecap="round"
@@ -82,12 +82,12 @@
                                 />
                             </svg>
                         </div>
-                        <h3 class="mb-2 font-semibold text-gray-900">Monitoring Curah Hujan</h3>
-                        <p class="text-sm text-gray-600">Pemantauan intensitas curah hujan secara real-time dengan data akurat dari BMKG</p>
+                        <h3 class="mb-2 font-bold text-gray-900">Monitoring Curah Hujan</h3>
+                        <p class="text-sm text-gray-700">Pemantauan intensitas curah hujan secara real-time dengan data akurat dari BMKG</p>
                     </div>
 
-                    <div class="rounded-lg bg-cyan-50 p-6">
-                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-600">
+                    <div class="rounded-xl bg-gradient-to-br from-cyan-50 to-cyan-100 p-6 hover:shadow-md transition-shadow">
+                        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-cyan-600">
                             <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     stroke-linecap="round"
@@ -97,27 +97,27 @@
                                 />
                             </svg>
                         </div>
-                        <h3 class="mb-2 font-semibold text-gray-900">Data TMA & Debit</h3>
-                        <p class="text-sm text-gray-600">Informasi tinggi muka air dan debit sungai untuk antisipasi banjir</p>
+                        <h3 class="mb-2 font-bold text-gray-900">Data TMA & Debit</h3>
+                        <p class="text-sm text-gray-700">Informasi tinggi muka air dan debit sungai untuk antisipasi banjir</p>
                     </div>
 
-                    <div class="rounded-lg bg-green-50 p-6">
-                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-green-600">
+                    <div class="rounded-xl bg-gradient-to-br from-green-50 to-green-100 p-6 hover:shadow-md transition-shadow">
+                        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-green-600">
                             <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
                                     stroke-width="2"
-                                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0110.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                                 />
                             </svg>
                         </div>
-                        <h3 class="mb-2 font-semibold text-gray-900">Peta Interaktif</h3>
-                        <p class="text-sm text-gray-600">Visualisasi peta banjir dan titik monitoring yang mudah dipahami</p>
+                        <h3 class="mb-2 font-bold text-gray-900">Peta Interaktif</h3>
+                        <p class="text-sm text-gray-700">Visualisasi peta banjir dan titik monitoring yang mudah dipahami</p>
                     </div>
 
-                    <div class="rounded-lg bg-yellow-50 p-6">
-                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-yellow-600">
+                    <div class="rounded-xl bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 hover:shadow-md transition-shadow">
+                        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-yellow-600">
                             <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     stroke-linecap="round"
@@ -127,12 +127,12 @@
                                 />
                             </svg>
                         </div>
-                        <h3 class="mb-2 font-semibold text-gray-900">Data Iklim</h3>
-                        <p class="text-sm text-gray-600">Informasi cuaca dan kondisi iklim terkini untuk wilayah Samarinda</p>
+                        <h3 class="mb-2 font-bold text-gray-900">Data Iklim</h3>
+                        <p class="text-sm text-gray-700">Informasi cuaca dan kondisi iklim terkini untuk wilayah Samarinda</p>
                     </div>
 
-                    <div class="rounded-lg bg-indigo-50 p-6">
-                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600">
+                    <div class="rounded-xl bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 hover:shadow-md transition-shadow">
+                        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-600">
                             <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     stroke-linecap="round"
@@ -142,12 +142,12 @@
                                 />
                             </svg>
                         </div>
-                        <h3 class="mb-2 font-semibold text-gray-900">Kualitas Air</h3>
-                        <p class="text-sm text-gray-600">Monitoring kualitas air sungai untuk kesehatan lingkungan</p>
+                        <h3 class="mb-2 font-bold text-gray-900">Kualitas Air</h3>
+                        <p class="text-sm text-gray-700">Monitoring kualitas air sungai untuk kesehatan lingkungan</p>
                     </div>
 
-                    <div class="rounded-lg bg-purple-50 p-6">
-                        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-purple-600">
+                    <div class="rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 p-6 hover:shadow-md transition-shadow">
+                        <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-600">
                             <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     stroke-linecap="round"
@@ -157,39 +157,38 @@
                                 />
                             </svg>
                         </div>
-                        <h3 class="mb-2 font-semibold text-gray-900">Permohonan Data</h3>
-                        <p class="text-sm text-gray-600">Layanan permintaan data historis untuk penelitian dan analisis</p>
+                        <h3 class="mb-2 font-bold text-gray-900">Permohonan Data</h3>
+                        <p class="text-sm text-gray-700">Layanan permintaan data historis untuk penelitian dan analisis</p>
                     </div>
                 </div>
             </div>
-
             <!-- Technology Section -->
-            <div class="mb-8 rounded-lg bg-white p-8 shadow">
-                <h2 class="mb-6 text-2xl font-bold text-gray-900">Teknologi yang Digunakan</h2>
-                <div class="mx-auto grid max-w-2xl grid-cols-1 gap-4 md:grid-cols-2">
-                    <div class="rounded-lg bg-gray-50 p-4 text-center">
-                        <div class="mb-2 text-3xl">🐘</div>
-                        <h4 class="font-semibold text-gray-900">Laravel</h4>
-                        <p class="text-xs text-gray-600">Backend Framework</p>
+            <div class="mb-12 rounded-2xl bg-white p-8 shadow-lg">
+                <h2 class="mb-8 text-3xl font-bold text-gray-900">Teknologi yang Digunakan</h2>
+                <div class="mx-auto grid max-w-2xl grid-cols-1 gap-6 md:grid-cols-2">
+                    <div class="rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 p-8 text-center hover:shadow-md transition-shadow">
+                        <div class="mb-3 text-4xl">🐘</div>
+                        <h4 class="font-bold text-gray-900">Laravel</h4>
+                        <p class="text-sm text-gray-600 mt-2">Backend Framework</p>
                     </div>
-                    <div class="rounded-lg bg-gray-50 p-4 text-center">
-                        <div class="mb-2 text-3xl">⚡</div>
-                        <h4 class="font-semibold text-gray-900">Vue.js</h4>
-                        <p class="text-xs text-gray-600">Frontend Framework</p>
+                    <div class="rounded-xl bg-gradient-to-br from-green-50 to-green-100 p-8 text-center hover:shadow-md transition-shadow">
+                        <div class="mb-3 text-4xl">⚡</div>
+                        <h4 class="font-bold text-gray-900">Vue.js</h4>
+                        <p class="text-sm text-gray-600 mt-2">Frontend Framework</p>
                     </div>
                 </div>
             </div>
 
             <!-- Team Section -->
-            <div class="mb-8 rounded-lg bg-white p-8 shadow">
-                <h2 class="mb-6 text-center text-2xl font-bold text-gray-900">Tim Kami</h2>
-                <p class="mx-auto mb-8 max-w-2xl text-center text-gray-600">
+            <div class="mb-12 rounded-2xl bg-white p-8 shadow-lg">
+                <h2 class="mb-4 text-center text-3xl font-bold text-gray-900">Tim Kami</h2>
+                <p class="mx-auto mb-10 max-w-2xl text-center text-gray-600">
                     Kenali tim yang berdedikasi di balik Sistem Pemantau Risiko Banjir Samarinda
                 </p>
 
                 <!-- Project Lead -->
-                <div class="mb-8">
-                    <div class="bg-linear-to-br mx-auto max-w-md rounded-lg from-blue-50 to-blue-100 p-8 transition-shadow hover:shadow-lg">
+                <div class="mb-10 flex justify-center">
+                    <div class="mx-auto max-w-sm rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 p-8 shadow-md hover:shadow-lg transition-shadow">
                         <div class="flex flex-col items-center">
                             <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-lg bg-blue-600 text-white shadow-lg">
                                 <svg class="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -211,7 +210,7 @@
                 <!-- Team Members -->
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
                     <!-- Lead Developers -->
-                    <div class="bg-linear-to-br rounded-lg from-green-50 to-green-100 p-6 transition-shadow hover:shadow-lg">
+                    <div class="rounded-2xl bg-gradient-to-br from-green-50 to-green-100 p-6 shadow-md hover:shadow-lg transition-shadow">
                         <div class="mb-4 text-center">
                             <div class="mb-4 flex justify-center">
                                 <div class="flex h-16 w-16 items-center justify-center rounded-lg bg-green-600 text-white shadow">
@@ -225,23 +224,23 @@
                                     </svg>
                                 </div>
                             </div>
-                            <p class="mb-4 text-sm font-bold uppercase tracking-wide text-green-600">Lead Developer</p>
+                            <p class="text-sm font-bold uppercase tracking-wide text-green-600">Lead Developer</p>
                         </div>
-                        <div class="space-y-3">
-                            <div class="text-center">
-                                <h3 class="text-sm font-bold text-gray-900">Nurul Latifa</h3>
+                        <div class="space-y-3 text-center">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-900">Denny Mulia</h3>
                             </div>
-                            <div class="text-center">
-                                <h3 class="text-sm font-bold text-gray-900">Setriyani</h3>
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-900">Muhammad Rafli Adila Risdi Saputra</h3>
                             </div>
                             <div class="border-t border-green-200 pt-3">
-                                <p class="text-center text-xs text-gray-600">Pengembangan Backend dan Integrasi API</p>
+                                <p class="text-xs text-gray-600">Pengembangan Backend dan Integrasi API</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Frontend Developers -->
-                    <div class="bg-linear-to-br rounded-lg from-purple-50 to-purple-100 p-6 transition-shadow hover:shadow-lg">
+                    <div class="rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 p-6 shadow-md hover:shadow-lg transition-shadow">
                         <div class="mb-4 text-center">
                             <div class="mb-4 flex justify-center">
                                 <div class="flex h-16 w-16 items-center justify-center rounded-lg bg-purple-600 text-white shadow">
@@ -255,23 +254,23 @@
                                     </svg>
                                 </div>
                             </div>
-                            <p class="mb-4 text-sm font-bold uppercase tracking-wide text-purple-600">Frontend Developer</p>
+                            <p class="text-sm font-bold uppercase tracking-wide text-purple-600">Frontend Developer</p>
                         </div>
-                        <div class="space-y-3">
-                            <div class="text-center">
-                                <h3 class="text-sm font-bold text-gray-900">Alya Kamilla Fauziah</h3>
+                        <div class="space-y-3 text-center">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-900">Ahmad Rafi Irsyad</h3>
                             </div>
-                            <div class="text-center">
-                                <h3 class="text-sm font-bold text-gray-900">Mutia Rahmah</h3>
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-900">Hammam Syamil</h3>
                             </div>
                             <div class="border-t border-purple-200 pt-3">
-                                <p class="text-center text-xs text-gray-600">Desain UI/UX dan Implementasi Frontend</p>
+                                <p class="text-xs text-gray-600">Desain UI/UX dan Implementasi Frontend</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Data Analysts -->
-                    <div class="bg-linear-to-br rounded-lg from-orange-50 to-orange-100 p-6 transition-shadow hover:shadow-lg">
+                    <div class="rounded-2xl bg-gradient-to-br from-orange-50 to-orange-100 p-6 shadow-md hover:shadow-lg transition-shadow">
                         <div class="mb-4 text-center">
                             <div class="mb-4 flex justify-center">
                                 <div class="flex h-16 w-16 items-center justify-center rounded-lg bg-orange-600 text-white shadow">
@@ -285,17 +284,17 @@
                                     </svg>
                                 </div>
                             </div>
-                            <p class="mb-4 text-sm font-bold uppercase tracking-wide text-orange-600">Data Analyst</p>
+                            <p class="text-sm font-bold uppercase tracking-wide text-orange-600">Data Analyst</p>
                         </div>
-                        <div class="space-y-3">
-                            <div class="text-center">
+                        <div class="space-y-3 text-center">
+                            <div>
                                 <h3 class="text-sm font-bold text-gray-900">Athasyahri Syawal Fahrezy</h3>
                             </div>
-                            <div class="text-center">
+                            <div>
                                 <h3 class="text-sm font-bold text-gray-900">Tua Delima Sitompul</h3>
                             </div>
                             <div class="border-t border-orange-200 pt-3">
-                                <p class="text-center text-xs text-gray-600">Analisis Data Cuaca dan Pelaporan</p>
+                                <p class="text-xs text-gray-600">Analisis Data Cuaca dan Pelaporan</p>
                             </div>
                         </div>
                     </div>
@@ -303,12 +302,12 @@
             </div>
 
             <!-- Contact Section -->
-            <div class="bg-linear-to-r rounded-lg from-gray-800 to-gray-900 p-8 text-white shadow-lg">
-                <h2 class="mb-4 text-center text-2xl font-bold">Hubungi Kami</h2>
+            <div class="rounded-2xl bg-gradient-to-r from-gray-800 to-gray-900 p-12 text-white shadow-xl">
+                <h2 class="mb-8 text-center text-3xl font-bold">Hubungi Kami</h2>
                 <div class="mx-auto max-w-md">
                     <div class="text-center">
-                        <div class="mb-2 flex items-center justify-center">
-                            <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="mb-4 flex items-center justify-center">
+                            <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
@@ -317,9 +316,9 @@
                                 />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-                            <h3 class="font-semibold">Alamat</h3>
+                            <h3 class="text-lg font-bold">Alamat</h3>
                         </div>
-                        <p class="text-sm opacity-90">
+                        <p class="text-blue-100">
                             Kota Samarinda<br />
                             Kalimantan Timur, Indonesia
                         </p>

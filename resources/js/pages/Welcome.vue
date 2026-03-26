@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { defineAsyncComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 import Header from '@/Components/dashboard/Header.vue';
-import WeatherMap from '@/Components/WeatherMap.vue';
+
+const WeatherMap = defineAsyncComponent(() => import('@/Components/WeatherMap.vue'));
 
 interface WeatherForecast {
     datetime: string;
@@ -24,10 +25,16 @@ const weatherData = ref<WeatherData[] | null>(null);
 const loading = ref(true);
 const selectedDay = ref(0); // 0 = today, 1 = tomorrow, 2 = day after tomorrow
 const weatherAlert = ref({ type: 'info', message: '' });
+const mapHostRef = ref<HTMLElement | null>(null);
+const shouldRenderMap = ref(false);
+let mapObserver: IntersectionObserver | null = null;
 
-onMounted(async () => {
+const fetchWeatherData = async () => {
     try {
-        const response = await axios.get('/api/weather');
+        const response = await axios.get('/api/weather', {
+            timeout: 5000,
+        });
+
         if (response.data.success) {
             weatherData.value = response.data.data.data;
             analyzeWeather24h();
@@ -37,6 +44,41 @@ onMounted(async () => {
     } finally {
         loading.value = false;
     }
+};
+
+const observeMapVisibility = () => {
+    if (!mapHostRef.value) {
+        return;
+    }
+
+    mapObserver = new IntersectionObserver(
+        (entries) => {
+            if (entries[0]?.isIntersecting) {
+                shouldRenderMap.value = true;
+                mapObserver?.disconnect();
+                mapObserver = null;
+            }
+        },
+        {
+            rootMargin: '300px 0px',
+        },
+    );
+
+    mapObserver.observe(mapHostRef.value);
+};
+
+onMounted(() => {
+    // Defer weather fetch so first paint is faster.
+    setTimeout(() => {
+        void fetchWeatherData();
+    }, 0);
+
+    observeMapVisibility();
+});
+
+onBeforeUnmount(() => {
+    mapObserver?.disconnect();
+    mapObserver = null;
 });
 
 const getWeatherIcon = (code: number) => {
@@ -150,12 +192,14 @@ const getDayLabel = (day: number) => {
                 <div class="flex gap-4">
                     <Link
                         href="/curah-hujan"
+                        prefetch
                         class="transform rounded-lg bg-white px-6 py-3 font-semibold text-blue-600 shadow-lg transition-all hover:scale-105 hover:shadow-xl"
                     >
                         Lihat Data Curah Hujan
                     </Link>
                     <Link
                         href="/tentang-kami"
+                        prefetch
                         class="rounded-lg bg-blue-500 px-6 py-3 font-semibold text-white shadow-lg transition-all hover:bg-blue-400"
                     >
                         Tentang Kami
@@ -237,6 +281,7 @@ const getDayLabel = (day: number) => {
                         </div>
                         <Link
                             href="/curah-hujan"
+                            prefetch
                             class="transform rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-3 font-semibold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
                         >
                             Lihat Detail
@@ -290,13 +335,16 @@ const getDayLabel = (day: number) => {
                     <!-- Map Section -->
                     <div class="relative">
                         <h4 class="relative z-20 mb-4 text-xl font-bold text-gray-900">Peta Samarinda</h4>
-                        <div class="relative z-0 h-96 overflow-hidden rounded-xl shadow-lg">
-                            <WeatherMap />
+                        <div ref="mapHostRef" class="relative z-0 h-96 overflow-hidden rounded-xl shadow-lg">
+                            <WeatherMap v-if="shouldRenderMap" />
+                            <div v-else class="flex h-full items-center justify-center bg-slate-100 text-sm text-slate-500">
+                                Memuat peta...
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <Link href="/tma-debit" class="group rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl">
+                <Link href="/tma-debit" prefetch class="group rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl">
                     <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-100 transition-colors group-hover:bg-cyan-200">
                         <svg class="h-8 w-8 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path
@@ -311,7 +359,7 @@ const getDayLabel = (day: number) => {
                     <p class="text-gray-600">Monitoring tinggi muka air dan debit sungai untuk manajemen sumber daya air</p>
                 </Link>
 
-                <Link href="/iklim" class="group rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl">
+                <Link href="/iklim" prefetch class="group rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl">
                     <div
                         class="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-yellow-100 transition-colors group-hover:bg-yellow-200"
                     >
@@ -328,7 +376,7 @@ const getDayLabel = (day: number) => {
                     <p class="text-gray-600">Data iklim dan cuaca untuk analisis pola iklim jangka panjang</p>
                 </Link>
 
-                <Link href="/kualitas-air" class="group rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl">
+                <Link href="/kualitas-air" prefetch class="group rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl">
                     <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-green-100 transition-colors group-hover:bg-green-200">
                         <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path
@@ -343,7 +391,7 @@ const getDayLabel = (day: number) => {
                     <p class="text-gray-600">Monitoring kualitas air untuk memastikan keamanan dan kebersihan lingkungan</p>
                 </Link>
 
-                <Link href="/permohonan-data" class="group rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl">
+                <Link href="/permohonan-data" prefetch class="group rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl">
                     <div
                         class="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-purple-100 transition-colors group-hover:bg-purple-200"
                     >
@@ -360,7 +408,7 @@ const getDayLabel = (day: number) => {
                     <p class="text-gray-600">Ajukan permintaan akses data untuk keperluan penelitian dan analisis</p>
                 </Link>
 
-                <Link href="/tentang-kami" class="group rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl">
+                <Link href="/tentang-kami" prefetch class="group rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl">
                     <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100 transition-colors group-hover:bg-gray-200">
                         <svg class="h-8 w-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path
