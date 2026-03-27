@@ -29,6 +29,7 @@ test('weather endpoint returns normalized payload and uses cache', function () {
                                 'weather' => 1,
                                 'weather_desc' => 'Cerah Berawan',
                                 'hu' => 80,
+                                'tp' => 1.2,
                                 'ws' => 12,
                                 'wd' => 'NE',
                             ],
@@ -46,6 +47,7 @@ test('weather endpoint returns normalized payload and uses cache', function () {
         ->assertJsonPath('success', true)
         ->assertJsonPath('data.data.0.lokasi.adm4', '64.72.03.1002')
         ->assertJsonPath('data.data.0.cuaca.0.0.weather_desc', 'Cerah Berawan')
+        ->assertJsonPath('data.data.0.cuaca.0.0.tp', 1.2)
         ->assertJsonMissingPath('data.data.0.cuaca.0.0.ws');
 
     $secondResponse = $this->getJson('/api/weather');

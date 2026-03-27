@@ -165,6 +165,7 @@ class WeatherController extends Controller
                         'weather' => $forecast['weather'] ?? null,
                         'weather_desc' => $forecast['weather_desc'] ?? null,
                         'hu' => $forecast['hu'] ?? null,
+                        'tp' => $forecast['tp'] ?? null,
                     ];
                 })->values()->all();
             })->values()->all();

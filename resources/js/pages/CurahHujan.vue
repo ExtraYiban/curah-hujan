@@ -4,8 +4,17 @@
     <div class="min-h-screen bg-gray-50 font-sans">
         <Header />
         <main class="mx-auto max-w-7xl p-8">
-            <!-- Data BMKG Heading -->
-            <h2 class="mb-6 text-3xl font-bold text-gray-900">Data BMKG (Per 3 jam)</h2>
+            <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+                <h2 class="text-3xl font-bold text-gray-900">Data BMKG (Per 3 jam)</h2>
+                <button
+                    type="button"
+                    @click="refreshGraphData"
+                    :disabled="refreshingGraph || loadingGraph"
+                    class="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-cyan-700 disabled:cursor-not-allowed disabled:bg-cyan-300"
+                >
+                    {{ refreshingGraph ? 'Memperbarui...' : 'Update Data Grafik' }}
+                </button>
+            </div>
 
             <!-- Three Sections -->
             <div class="space-y-6">
@@ -33,29 +42,30 @@
                                 <line x1="0" y1="180" x2="800" y2="180" stroke="#e5e7eb" stroke-width="1" vector-effect="non-scaling-stroke" />
                                 <line x1="0" y1="240" x2="800" y2="240" stroke="#e5e7eb" stroke-width="1" vector-effect="non-scaling-stroke" />
 
-                                <!-- Bar chart (rainfall data per 3 hours) -->
-                                <rect x="50" y="180" width="60" height="60" fill="rgb(6, 182, 212)" />
-                                <rect x="150" y="120" width="60" height="120" fill="rgb(6, 182, 212)" />
-                                <rect x="250" y="150" width="60" height="90" fill="rgb(6, 182, 212)" />
-                                <rect x="350" y="100" width="60" height="140" fill="rgb(6, 182, 212)" />
-                                <rect x="450" y="140" width="60" height="100" fill="rgb(6, 182, 212)" />
-                                <rect x="550" y="160" width="60" height="80" fill="rgb(6, 182, 212)" />
-                                <rect x="650" y="190" width="60" height="50" fill="rgb(6, 182, 212)" />
+                                <rect
+                                    v-for="(bar, index) in bmkgBars"
+                                    :key="`rainfall-bar-${index}`"
+                                    :x="bar.x"
+                                    :y="bar.y"
+                                    :width="bar.width"
+                                    :height="bar.height"
+                                    fill="rgb(6, 182, 212)"
+                                    rx="6"
+                                />
                             </svg>
 
                             <!-- X-axis labels (hours) -->
                             <div class="absolute bottom-0 left-0 right-0 flex justify-between px-2 text-xs text-gray-500">
-                                <span>00</span>
-                                <span>03</span>
-                                <span>06</span>
-                                <span>09</span>
-                                <span>12</span>
-                                <span>15</span>
-                                <span>18</span>
-                                <span>21</span>
+                                <span v-for="(hourLabel, index) in barHourLabels" :key="`hour-label-${index}`">{{ hourLabel }}</span>
                             </div>
                         </div>
+
+                        <div v-if="loadingGraph" class="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70 text-sm font-medium text-gray-600">
+                            Memuat data grafik...
+                        </div>
                     </div>
+
+                    <p v-if="graphError" class="mt-3 text-sm text-red-600">{{ graphError }}</p>
                 </div>
 
                 <!-- Data Prediksi: Curah hujan Section -->
@@ -137,48 +147,228 @@
 
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Header from '../Components/dashboard/Header.vue';
 
-// BMKG chart paths - multiple curves showing rainfall data
+interface BmkgForecast {
+    local_datetime: string;
+    tp: number | null;
+}
+
+interface BmkgResponse {
+    success: boolean;
+    message?: string;
+    data?: {
+        data?: {
+            cuaca?: BmkgForecast[][];
+        }[];
+    };
+}
+
+interface BarPoint {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
+const bmkgForecasts = ref<BmkgForecast[]>([]);
+const loadingGraph = ref(false);
+const refreshingGraph = ref(false);
+const graphError = ref('');
+
+const defaultHourLabels = ['00', '03', '06', '09', '12', '15', '18', '21'];
+
+const parseRainfall = (value: number | null | undefined): number => {
+    if (typeof value !== 'number' || Number.isNaN(value)) {
+        return 0;
+    }
+
+    return Math.max(0, value);
+};
+
+const bmkgRainfall = computed(() => {
+    return bmkgForecasts.value.slice(0, 8).map((forecast) => parseRainfall(forecast.tp));
+});
+
+const rainfallScaleMax = computed(() => {
+    const maxRainfall = Math.max(...bmkgRainfall.value, 0);
+    return maxRainfall > 0 ? maxRainfall : 1;
+});
+
+const bmkgBars = computed<BarPoint[]>(() => {
+    const values = bmkgRainfall.value;
+    const count = values.length || 8;
+    const chartWidth = 800;
+    const chartHeight = 240;
+    const step = chartWidth / count;
+    const width = Math.min(64, step * 0.62);
+
+    return Array.from({ length: count }, (_, index) => {
+        const value = values[index] ?? 0;
+        const height = (value / rainfallScaleMax.value) * chartHeight;
+        const x = index * step + (step - width) / 2;
+        const y = chartHeight - height;
+
+        return {
+            x,
+            y,
+            width,
+            height,
+        };
+    });
+});
+
+const barHourLabels = computed(() => {
+    if (bmkgForecasts.value.length === 0) {
+        return defaultHourLabels;
+    }
+
+    const labels = bmkgForecasts.value.slice(0, 8).map((forecast) => {
+        if (!forecast.local_datetime) {
+            return '--';
+        }
+
+        const date = new Date(forecast.local_datetime.replace(' ', 'T'));
+        if (Number.isNaN(date.getTime())) {
+            return '--';
+        }
+
+        return date.toLocaleTimeString('id-ID', {
+            hour: '2-digit',
+            hour12: false,
+        });
+    });
+
+    while (labels.length < 8) {
+        labels.push(defaultHourLabels[labels.length]);
+    }
+
+    return labels;
+});
+
+const predictionPoints = computed(() => {
+    const source = bmkgRainfall.value.slice(0, 7);
+    const values = source.length > 0 ? source : [0, 0, 0, 0, 0, 0, 0];
+    const maxValue = Math.max(...values, 1);
+
+    return values.map((value, index) => {
+        const x = index * 100;
+        const normalized = value / maxValue;
+        const y = 190 - normalized * 120;
+
+        return {
+            x,
+            y,
+        };
+    });
+});
+
+const buildPath = (offset = 0, close = false): string => {
+    const points = predictionPoints.value.map((point) => {
+        const y = Math.max(18, Math.min(198, point.y + offset));
+        return {
+            x: point.x,
+            y,
+        };
+    });
+
+    const pathData = points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+
+    if (!close) {
+        return pathData;
+    }
+
+    return `${pathData} L 600 200 L 0 200 Z`;
+};
+
 const bmkgChartPath1 = computed(() => {
-    const points = [
-        { x: 0, y: 180 },
-        { x: 100, y: 160 },
-        { x: 200, y: 170 },
-        { x: 300, y: 150 },
-        { x: 400, y: 165 },
-        { x: 500, y: 140 },
-        { x: 600, y: 155 },
-    ];
-    return points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+    return buildPath(18, false);
 });
 
 const bmkgChartPath2 = computed(() => {
-    const points = [
-        { x: 0, y: 200 },
-        { x: 100, y: 190 },
-        { x: 200, y: 150 },
-        { x: 300, y: 120 },
-        { x: 400, y: 100 },
-        { x: 500, y: 90 },
-        { x: 600, y: 110 },
-    ];
-    const pathData = points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
-    return `${pathData} L 600 280 L 0 280 Z`;
+    return buildPath(0, true);
 });
 
 const bmkgChartPath3 = computed(() => {
-    const points = [
-        { x: 0, y: 220 },
-        { x: 100, y: 210 },
-        { x: 200, y: 200 },
-        { x: 300, y: 180 },
-        { x: 400, y: 190 },
-        { x: 500, y: 170 },
-        { x: 600, y: 185 },
-    ];
-    return points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+    return buildPath(-12, false);
+});
+
+const extractForecasts = (result: BmkgResponse): BmkgForecast[] => {
+    const groupedForecasts = result.data?.data?.[0]?.cuaca;
+    if (!Array.isArray(groupedForecasts)) {
+        return [];
+    }
+
+    return groupedForecasts.flat().filter((forecast) => typeof forecast?.local_datetime === 'string');
+};
+
+const getCookieValue = (name: string): string | null => {
+    const cookieMatch = document.cookie
+        .split('; ')
+        .find((cookie) => cookie.startsWith(`${name}=`));
+
+    if (!cookieMatch) {
+        return null;
+    }
+
+    const value = cookieMatch.split('=').slice(1).join('=');
+
+    return decodeURIComponent(value);
+};
+
+const fetchGraphData = async (forceRefresh = false): Promise<void> => {
+    graphError.value = '';
+
+    if (forceRefresh) {
+        refreshingGraph.value = true;
+    } else {
+        loadingGraph.value = true;
+    }
+
+    try {
+        const csrfToken = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content;
+        const xsrfToken = getCookieValue('XSRF-TOKEN');
+
+        const response = await fetch(forceRefresh ? '/api/weather/refresh' : '/api/weather', {
+            method: forceRefresh ? 'POST' : 'GET',
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                ...(xsrfToken ? { 'X-XSRF-TOKEN': xsrfToken } : {}),
+                ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
+                ...(forceRefresh ? { 'Content-Type': 'application/json' } : {}),
+            },
+            ...(forceRefresh ? { body: JSON.stringify({}) } : {}),
+            credentials: 'same-origin',
+        });
+
+        const result = (await response.json()) as BmkgResponse;
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message ?? 'Gagal mengambil data BMKG.');
+        }
+
+        const forecasts = extractForecasts(result);
+        if (forecasts.length === 0) {
+            throw new Error('Data BMKG belum tersedia untuk ditampilkan.');
+        }
+
+        bmkgForecasts.value = forecasts;
+    } catch (error) {
+        graphError.value = error instanceof Error ? error.message : 'Gagal memperbarui data grafik.';
+    } finally {
+        loadingGraph.value = false;
+        refreshingGraph.value = false;
+    }
+};
+
+const refreshGraphData = async (): Promise<void> => {
+    await fetchGraphData(true);
+};
+
+onMounted(async () => {
+    await fetchGraphData();
 });
 
 // LSTM prediction chart
